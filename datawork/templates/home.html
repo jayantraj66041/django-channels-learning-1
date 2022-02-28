@@ -10,12 +10,19 @@
     <h2 id="app">{{text}}</h2>
 
     <script>
-        var socket = new WebSocket("ws://127.0.0.1:8000/ws/count_url/");
-
+        var socket = new WebSocket("ws://127.0.0.1:8000/ws/my_async/");
+        socket.onopen = function(){
+            console.log("WebSocket connected open...");
+            socket.send("Hi.. Message from Jayant");
+        }
         socket.onmessage = function(event){
-            let data = JSON.parse(event.data);
-            console.log(data);
-            document.querySelector('#app').innerText = data.message;
+            document.querySelector('#app').innerText = event.data;
+        }
+        socket.onerror = function(event){
+            console.log("WebSocket error socket occurred..", event);
+        }
+        socket.onclose = function(event){
+            console.log("WebSocket connection closed...", event)
         }
     </script>
 </body>
